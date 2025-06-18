@@ -30,9 +30,7 @@ app.use(cors({
 app.use(express.json()); // will allow us to parse req.body
 app.use(cookieParser());
 
-app.use((req, res) => {
-    res.status(404).send("Not Found");
-});
+
 
 app.use("/test", (req, res) => {
     res.send("Hello World");
@@ -45,6 +43,10 @@ app.use("/api/v1/tv", protectRoute, tvRoutes);
 app.use("/api/v1/search", protectRoute, searchRoutes);
 app.use("/api/v1/user", protectRoute, userRoutes);
 
+app.use((req, res) => {
+    res.status(404).send("Not Found");
+});
+
 if (ENV_VARS.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, "/frontend/dist")));
 
@@ -52,6 +54,8 @@ if (ENV_VARS.NODE_ENV === "production") {
         res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
     });
 }
+
+
 
 app.listen(PORT, () => {
     console.log("Server started at http://localhost:" + PORT);
